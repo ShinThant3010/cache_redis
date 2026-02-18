@@ -1,0 +1,50 @@
+from typing import Any
+
+from pydantic import BaseModel, Field
+
+
+class SetOneRequest(BaseModel):
+    id: str
+    data: dict[str, Any]
+    ttl_seconds: int | None = Field(default=None, ge=1)
+
+
+class SetOneResponse(BaseModel):
+    success: bool
+
+
+class SetManyRequest(BaseModel):
+    items: list[dict[str, Any]] = Field(default_factory=list)
+    id_field: str = "id"
+    ttl_seconds: int | None = Field(default=None, ge=1)
+
+
+class SetManyResponse(BaseModel):
+    count: int
+
+class LoadFromBigQueryRequest(BaseModel):
+    table_path: str = Field(description="project.dataset.table")
+    id_field: str = "id"
+    where_clause: str | None = None
+    ttl_seconds: int | None = Field(default=None, ge=1)
+
+
+class LoadFromBigQueryResponse(BaseModel):
+    count: int
+
+
+class GetOneResponse(BaseModel):
+    id: str
+    data: dict[str, Any] | None
+
+
+class GetManyRequest(BaseModel):
+    ids: list[str] = Field(default_factory=list)
+
+
+class GetManyResponse(BaseModel):
+    items: dict[str, dict[str, Any] | None]
+
+
+class CachedIDsResponse(BaseModel):
+    ids: list[str]
