@@ -4,6 +4,8 @@ from typing import Any
 
 import redis
 from google.cloud import bigquery
+from fastapi.encoders import jsonable_encoder
+
 
 
 def _redis_client() -> redis.Redis:
@@ -14,7 +16,7 @@ def _redis_client() -> redis.Redis:
 
 def set_one(item_id: str, payload: dict[str, Any], ttl_seconds: int | None = None) -> bool:
     client = _redis_client()
-    return bool(client.set(item_id, json.dumps(payload), ex=ttl_seconds))
+    return bool(client.set(item_id, json.dumps(jsonable_encoder(payload)), ex=ttl_seconds))
 
 
 def set_many(items: list[dict[str, Any]], id_field: str = "id", ttl_seconds: int | None = None) -> int:
@@ -22,7 +24,7 @@ def set_many(items: list[dict[str, Any]], id_field: str = "id", ttl_seconds: int
     mapping: dict[str, str] = {}
     for item in items:
         item_id = str(item[id_field])
-        mapping[item_id] = json.dumps(item)
+        mapping[item_id] = json.dumps(jsonable_encoder(item))
     if not mapping:
         return 0
     if ttl_seconds is None:
@@ -48,6 +50,7 @@ def set_many_bigquery_data(
         query += f" WHERE {where_clause}"
     rows = list(bq_client.query(query).result())
     items = [dict(row.items()) for row in rows]
+
     return set_many(items, id_field=id_field, ttl_seconds=ttl_seconds)
 
 
