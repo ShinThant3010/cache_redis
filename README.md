@@ -35,4 +35,5 @@ uv run python main.py
 - `POST /cache/set-many`
 - `POST /cache/get-many`
 - `GET /cache/ids`
+- `DELETE /cache/clear-all`
 - `POST /cache/load-from-bigquery`

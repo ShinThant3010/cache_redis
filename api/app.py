@@ -4,6 +4,7 @@ from fastapi import FastAPI, HTTPException
 
 from api.schema import (
     CachedIDsResponse,
+    ClearCacheResponse,
     GetManyRequest,
     GetManyResponse,
     GetOneResponse,
@@ -14,7 +15,7 @@ from api.schema import (
     SetOneRequest,
     SetOneResponse,
 )
-from functions.cache import get_cached_ids, get_many, get_one, set_many, set_many_bigquery_data, set_one
+from functions.cache import clear_all, get_cached_ids, get_many, get_one, set_many, set_many_bigquery_data, set_one
 
 
 app = FastAPI(
@@ -76,3 +77,8 @@ def cache_get_many(payload: GetManyRequest) -> GetManyResponse:
 @app.get("/cache/ids", response_model=CachedIDsResponse, tags=["Get"])
 def cache_ids(cache_prefix: str) -> CachedIDsResponse:
     return CachedIDsResponse(ids=get_cached_ids(cache_prefix=cache_prefix))
+
+
+@app.delete("/cache/clear-all", response_model=ClearCacheResponse, tags=["Set"])
+def cache_clear_all() -> ClearCacheResponse:
+    return ClearCacheResponse(cleared=clear_all())

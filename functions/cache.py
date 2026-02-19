@@ -80,3 +80,10 @@ def get_cached_ids(cache_prefix: str) -> list[str]:
     for key in client.scan_iter(match=pattern):
         ids.append(key)
     return sorted(ids)
+
+
+def clear_all() -> int:
+    client = _redis_client()
+    cleared = int(client.dbsize())
+    client.flushdb()
+    return cleared

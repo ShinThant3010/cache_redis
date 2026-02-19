@@ -48,3 +48,7 @@ class GetManyResponse(BaseModel):
 
 class CachedIDsResponse(BaseModel):
     ids: list[str]
+
+
+class ClearCacheResponse(BaseModel):
+    cleared: int
