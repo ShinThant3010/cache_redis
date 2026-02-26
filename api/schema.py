@@ -46,6 +46,11 @@ class GetManyResponse(BaseModel):
     items: dict[str, dict[str, Any] | None]
 
 
+class DeleteOneResponse(BaseModel):
+    id: str
+    deleted: bool
+
+
 class CachedIDsResponse(BaseModel):
     ids: list[str]
 

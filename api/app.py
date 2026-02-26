@@ -8,6 +8,7 @@ from api.schema import (
     GetManyRequest,
     GetManyResponse,
     GetOneResponse,
+    DeleteOneResponse,
     LoadFromBigQueryRequest,
     LoadFromBigQueryResponse,
     SetManyRequest,
@@ -15,7 +16,16 @@ from api.schema import (
     SetOneRequest,
     SetOneResponse,
 )
-from functions.cache import clear_all, get_cached_ids, get_many, get_one, set_many, set_many_bigquery_data, set_one
+from functions.cache import (
+    clear_all,
+    delete_one,
+    get_cached_ids,
+    get_many,
+    get_one,
+    set_many,
+    set_many_bigquery_data,
+    set_one,
+)
 
 
 app = FastAPI(
@@ -72,6 +82,11 @@ def cache_get_one(item_id: str) -> GetOneResponse:
 def cache_get_many(payload: GetManyRequest) -> GetManyResponse:
     items = get_many(payload.ids)
     return GetManyResponse(items=items)
+
+
+@app.delete("/cache/delete-one/{item_id}", response_model=DeleteOneResponse, tags=["Set"])
+def cache_delete_one(item_id: str) -> DeleteOneResponse:
+    return DeleteOneResponse(id=item_id, deleted=delete_one(item_id))
 
 
 @app.get("/cache/ids", response_model=CachedIDsResponse, tags=["Get"])

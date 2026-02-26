@@ -73,6 +73,11 @@ def get_many(item_ids: list[str]) -> dict[str, dict[str, Any] | None]:
     return output
 
 
+def delete_one(item_id: str) -> bool:
+    client = _redis_client()
+    return bool(client.delete(item_id))
+
+
 def get_cached_ids(cache_prefix: str) -> list[str]:
     client = _redis_client()
     pattern = f"{cache_prefix}:*"
