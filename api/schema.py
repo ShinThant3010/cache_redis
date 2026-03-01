@@ -17,6 +17,7 @@ class SetManyRequest(BaseModel):
     items: list[dict[str, Any]] = Field(default_factory=list)
     id_field: str = "id"
     ttl_seconds: int | None = Field(default=None, ge=1)
+    key_prefix: str | None = None
 
 
 class SetManyResponse(BaseModel):
@@ -27,6 +28,7 @@ class LoadFromBigQueryRequest(BaseModel):
     id_field: str = "id"
     where_clause: str | None = None
     ttl_seconds: int | None = Field(default=None, ge=1)
+    key_prefix: str | None = None
 
 
 class LoadFromBigQueryResponse(BaseModel):

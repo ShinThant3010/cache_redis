@@ -56,7 +56,12 @@ def cache_set_one(payload: SetOneRequest) -> SetOneResponse:
 @app.post("/cache/set-many", response_model=SetManyResponse, tags=["Set"])
 def cache_set_many(payload: SetManyRequest) -> SetManyResponse:
     try:
-        count = set_many(payload.items, id_field=payload.id_field, ttl_seconds=payload.ttl_seconds)
+        count = set_many(
+            payload.items,
+            id_field=payload.id_field,
+            ttl_seconds=payload.ttl_seconds,
+            key_prefix=payload.key_prefix,
+        )
     except KeyError as exc:
         raise HTTPException(status_code=400, detail=f"Missing id field in item: {payload.id_field}") from exc
     return SetManyResponse(count=count)
@@ -69,6 +74,7 @@ def cache_set_many_bigquery(payload: LoadFromBigQueryRequest) -> LoadFromBigQuer
         id_field=payload.id_field,
         where_clause=payload.where_clause,
         ttl_seconds=payload.ttl_seconds,
+        key_prefix=payload.key_prefix,
     )
     return LoadFromBigQueryResponse(count=count)
 

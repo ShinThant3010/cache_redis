@@ -4,6 +4,7 @@ Service to:
 - Read rows from a BigQuery table
 - Convert each row to JSON
 - Use the `id` column (or custom id field) as the cache key
+- Optionally prepend a key prefix (example: `recommendation:123`)
 - Save and read from Memorystore Redis
 
 ## Structure
@@ -37,4 +38,4 @@ uv run python main.py
 - `DELETE /cache/delete-one/{item_id}`
 - `GET /cache/ids`
 - `DELETE /cache/clear-all`
-- `POST /cache/load-from-bigquery`
+- `POST /cache/set-many-bigquery`
