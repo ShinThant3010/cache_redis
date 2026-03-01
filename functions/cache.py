@@ -19,12 +19,18 @@ def set_one(item_id: str, payload: dict[str, Any], ttl_seconds: int | None = Non
     return bool(client.set(item_id, json.dumps(jsonable_encoder(payload)), ex=ttl_seconds))
 
 
-def set_many(items: list[dict[str, Any]], id_field: str = "id", ttl_seconds: int | None = None) -> int:
+def set_many(
+    items: list[dict[str, Any]],
+    id_field: str = "id",
+    ttl_seconds: int | None = None,
+    key_prefix: str | None = None,
+) -> int:
     client = _redis_client()
     mapping: dict[str, str] = {}
     for item in items:
         item_id = str(item[id_field])
-        mapping[item_id] = json.dumps(jsonable_encoder(item))
+        cache_key = f"{key_prefix}:{item_id}" if key_prefix else item_id
+        mapping[cache_key] = json.dumps(jsonable_encoder(item))
     if not mapping:
         return 0
     if ttl_seconds is None:
@@ -43,6 +49,7 @@ def set_many_bigquery_data(
     id_field: str = "id",
     where_clause: str | None = None,
     ttl_seconds: int | None = None,
+    key_prefix: str | None = None,
 ) -> int:
     bq_client = bigquery.Client()
     query = f"SELECT * FROM `{table_path}`"
@@ -51,7 +58,12 @@ def set_many_bigquery_data(
     rows = list(bq_client.query(query).result())
     items = [dict(row.items()) for row in rows]
 
-    return set_many(items, id_field=id_field, ttl_seconds=ttl_seconds)
+    return set_many(
+        items,
+        id_field=id_field,
+        ttl_seconds=ttl_seconds,
+        key_prefix=key_prefix,
+    )
 
 
 def get_one(item_id: str) -> dict[str, Any] | None:
