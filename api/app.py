@@ -5,6 +5,7 @@ from fastapi import FastAPI, HTTPException
 from api.schema import (
     CachedIDsResponse,
     ClearCacheResponse,
+    DeleteByPrefixResponse,
     GetManyRequest,
     GetManyResponse,
     GetOneResponse,
@@ -18,6 +19,7 @@ from api.schema import (
 )
 from functions.cache import (
     clear_all,
+    delete_by_prefix,
     delete_one,
     get_cached_ids,
     get_many,
@@ -93,6 +95,12 @@ def cache_get_many(payload: GetManyRequest) -> GetManyResponse:
 @app.delete("/cache/delete-one/{item_id}", response_model=DeleteOneResponse, tags=["Set"])
 def cache_delete_one(item_id: str) -> DeleteOneResponse:
     return DeleteOneResponse(id=item_id, deleted=delete_one(item_id))
+
+
+@app.delete("/cache/delete-prefix/{cache_prefix}", response_model=DeleteByPrefixResponse, tags=["Set"])
+def cache_delete_prefix(cache_prefix: str) -> DeleteByPrefixResponse:
+    deleted_count = delete_by_prefix(cache_prefix=cache_prefix)
+    return DeleteByPrefixResponse(cache_prefix=cache_prefix, deleted_count=deleted_count)
 
 
 @app.get("/cache/ids", response_model=CachedIDsResponse, tags=["Get"])

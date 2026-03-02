@@ -53,6 +53,11 @@ class DeleteOneResponse(BaseModel):
     deleted: bool
 
 
+class DeleteByPrefixResponse(BaseModel):
+    cache_prefix: str
+    deleted_count: int
+
+
 class CachedIDsResponse(BaseModel):
     ids: list[str]
 

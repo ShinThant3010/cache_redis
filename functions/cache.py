@@ -90,6 +90,17 @@ def delete_one(item_id: str) -> bool:
     return bool(client.delete(item_id))
 
 
+def delete_by_prefix(cache_prefix: str) -> int:
+    client = _redis_client()
+    pattern = f"{cache_prefix}:*"
+    keys_to_delete: list[str] = []
+    for key in client.scan_iter(match=pattern):
+        keys_to_delete.append(key)
+    if not keys_to_delete:
+        return 0
+    return int(client.delete(*keys_to_delete))
+
+
 def get_cached_ids(cache_prefix: str) -> list[str]:
     client = _redis_client()
     pattern = f"{cache_prefix}:*"
