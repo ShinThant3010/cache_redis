@@ -36,7 +36,7 @@ uv run python main.py
 - `POST /cache/set-many`
 - `POST /cache/get-many`
 - `DELETE /cache/delete-one/{item_id}`
-- `GET /cache/ids`
+- `GET /cache/get-many-by-prefix`
 - `GET /cache/memory-usage`
 - `DELETE /cache/clear-all`
 - `POST /cache/set-many-bigquery`

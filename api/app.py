@@ -107,8 +107,8 @@ def cache_delete_prefix(cache_prefix: str) -> DeleteByPrefixResponse:
     return DeleteByPrefixResponse(cache_prefix=cache_prefix, deleted_count=deleted_count)
 
 
-@app.get("/cache/ids", response_model=CachedIDsResponse, tags=["Get"])
-def cache_ids(cache_prefix: str) -> CachedIDsResponse:
+@app.get("/cache/get-many-by-prefix", response_model=CachedIDsResponse, tags=["Get"])
+def cache_get_many_by_prefix(cache_prefix: str) -> CachedIDsResponse:
     ids = get_cached_ids(cache_prefix=cache_prefix)
     return CachedIDsResponse(ids=ids, id_count=len(ids))
 
