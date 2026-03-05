@@ -115,3 +115,14 @@ def clear_all() -> int:
     cleared = int(client.dbsize())
     client.flushdb()
     return cleared
+
+
+def get_used_memory_size() -> int:
+    client = _redis_client()
+    info = client.info("memory")
+    return int(info.get("used_memory", 0))
+
+
+def get_id_count() -> int:
+    client = _redis_client()
+    return int(client.dbsize())

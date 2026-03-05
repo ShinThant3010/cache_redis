@@ -46,6 +46,7 @@ class GetManyRequest(BaseModel):
 
 class GetManyResponse(BaseModel):
     items: dict[str, dict[str, Any] | None]
+    id_count: int
 
 
 class DeleteOneResponse(BaseModel):
@@ -60,7 +61,13 @@ class DeleteByPrefixResponse(BaseModel):
 
 class CachedIDsResponse(BaseModel):
     ids: list[str]
+    id_count: int
 
 
 class ClearCacheResponse(BaseModel):
     cleared: int
+
+
+class CacheMemoryUsageResponse(BaseModel):
+    used_memory_bytes: int
+    id_count: int

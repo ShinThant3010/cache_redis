@@ -4,6 +4,7 @@ from fastapi import FastAPI, HTTPException
 
 from api.schema import (
     CachedIDsResponse,
+    CacheMemoryUsageResponse,
     ClearCacheResponse,
     DeleteByPrefixResponse,
     GetManyRequest,
@@ -22,8 +23,10 @@ from functions.cache import (
     delete_by_prefix,
     delete_one,
     get_cached_ids,
+    get_id_count,
     get_many,
     get_one,
+    get_used_memory_size,
     set_many,
     set_many_bigquery_data,
     set_one,
@@ -89,7 +92,7 @@ def cache_get_one(item_id: str) -> GetOneResponse:
 @app.post("/cache/get-many", response_model=GetManyResponse, tags=["Get"])
 def cache_get_many(payload: GetManyRequest) -> GetManyResponse:
     items = get_many(payload.ids)
-    return GetManyResponse(items=items)
+    return GetManyResponse(items=items, id_count=len(items))
 
 
 @app.delete("/cache/delete-one/{item_id}", response_model=DeleteOneResponse, tags=["Set"])
@@ -105,9 +108,18 @@ def cache_delete_prefix(cache_prefix: str) -> DeleteByPrefixResponse:
 
 @app.get("/cache/ids", response_model=CachedIDsResponse, tags=["Get"])
 def cache_ids(cache_prefix: str) -> CachedIDsResponse:
-    return CachedIDsResponse(ids=get_cached_ids(cache_prefix=cache_prefix))
+    ids = get_cached_ids(cache_prefix=cache_prefix)
+    return CachedIDsResponse(ids=ids, id_count=len(ids))
 
 
 @app.delete("/cache/clear-all", response_model=ClearCacheResponse, tags=["Set"])
 def cache_clear_all() -> ClearCacheResponse:
     return ClearCacheResponse(cleared=clear_all())
+
+
+@app.get("/cache/memory-usage", response_model=CacheMemoryUsageResponse, tags=["Get"])
+def cache_memory_usage() -> CacheMemoryUsageResponse:
+    return CacheMemoryUsageResponse(
+        used_memory_bytes=get_used_memory_size(),
+        id_count=get_id_count(),
+    )
