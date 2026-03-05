@@ -123,6 +123,11 @@ def get_used_memory_size() -> int:
     return int(info.get("used_memory", 0))
 
 
+def get_used_memory_mb() -> float:
+    used_memory_bytes = get_used_memory_size()
+    return round(used_memory_bytes / (1024 * 1024), 2)
+
+
 def get_id_count() -> int:
     client = _redis_client()
     return int(client.dbsize())

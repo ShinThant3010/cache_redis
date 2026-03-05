@@ -26,6 +26,7 @@ from functions.cache import (
     get_id_count,
     get_many,
     get_one,
+    get_used_memory_mb,
     get_used_memory_size,
     set_many,
     set_many_bigquery_data,
@@ -121,5 +122,6 @@ def cache_clear_all() -> ClearCacheResponse:
 def cache_memory_usage() -> CacheMemoryUsageResponse:
     return CacheMemoryUsageResponse(
         used_memory_bytes=get_used_memory_size(),
+        used_memory_mb=get_used_memory_mb(),
         id_count=get_id_count(),
     )
