@@ -28,6 +28,9 @@ Typical use case: pre-load recommendation data into Redis and retrieve it with l
 - `api/app.py`: FastAPI app and route handlers
 - `api/schema.py`: Pydantic request/response models
 - `functions/cache.py`: Redis + BigQuery logic
+- `tests/conftest.py`: shared pytest fixtures (in-memory Redis fake)
+- `tests/test_cache_functions.py`: unit tests for core cache logic
+- `tests/test_api.py`: API endpoint tests with FastAPI `TestClient`
 - `Dockerfile`: container image build/runtime
 - `cloudbuild.yaml`: Cloud Build pipeline to build, push, and deploy to Cloud Run
 
@@ -69,10 +72,28 @@ uv sync
 uv run python main.py
 ```
 
-### 3. Open API docs
+### 3. Open API docs (local)
 
+- Swagger UI: `http://127.0.0.1:8000/docs`
+- ReDoc: `http://127.0.0.1:8000/redoc`
+
+### 4. Run tests
+
+```bash
+pytest -q
+```
+
+If `pytest` is missing:
+
+```bash
+uv add --dev pytest
+pytest -q
+```
+
+## Deployed service (Cloud Run)
+
+- API base URL: `https://hyde-cache-pipeline-api-810737581373.asia-southeast1.run.app`
 - Swagger UI: `https://hyde-cache-pipeline-api-810737581373.asia-southeast1.run.app/docs`
-- Cloud Run: `https://hyde-cache-pipeline-api-810737581373.asia-southeast1.run.app`
 
 ## API endpoints
 
@@ -154,5 +175,6 @@ Important deployment requirement: Cloud Run service must have network path to Re
 2. `GET /cache/get-one/{id}`
 3. `GET /cache/memory-usage`
 4. `DELETE /cache/delete-one/{id}`
+5. `pytest -q`
 
-If all succeed, Redis connectivity and JSON serialization paths are working.
+If all succeed, core API/cache behavior and serialization paths are working.
