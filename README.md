@@ -106,7 +106,7 @@ Read operations:
 - `GET /cache/get-many-by-prefix?cache_prefix=...`
 - `GET /cache/memory-usage`
 
-### 9.2 Request body, Response body
+### 9.2 Example - Request, Response
 
 `POST /cache/set-one`
 
