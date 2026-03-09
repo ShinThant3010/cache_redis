@@ -350,12 +350,17 @@ Not currently included in repo:
 - No `config.yaml` support in current code.
 - `where_clause` is directly interpolated into SQL string (caller must pass trusted input).
 
-## 17. Quick verification flow
+## 17. Versioning / Change Log
+
+Current API metadata version in app: `0.1.0`.
+
+Change log:
+- `2026-03-09`: README restructured with API contract, data dependencies, troubleshooting, performance, limitations, and verification flow sections.
+
+## 18. Quick verification flow
 
 1. `POST /cache/set-one`
 2. `GET /cache/get-one/{id}`
 3. `GET /cache/memory-usage`
 4. `DELETE /cache/delete-one/{id}`
 5. `pytest -q`
-
-If all succeed, core API/cache behavior and serialization paths are working.
