@@ -22,7 +22,7 @@ def test_set_get_many_and_runtime_header(fake_redis) -> None:
     assert set_resp.json() == {"count": 2}
     assert "x-runtime-respone" in set_resp.headers
 
-    get_resp = client.get("/cache/get-many", params=[("ids", "user:1"), ("ids", "user:2")])
+    get_resp = client.post("/cache/get-many", json={"ids": ["user:1", "user:2"]})
     assert get_resp.status_code == 200
     assert get_resp.json() == {
         "id_count": 2,
@@ -31,6 +31,15 @@ def test_set_get_many_and_runtime_header(fake_redis) -> None:
             "user:2": {"id": "2", "name": "b"},
         },
     }
+
+
+def test_get_many_requires_wrapped_ids_body(fake_redis) -> None:
+    client.post("/cache/set-one", json={"id": "TH_UNI_041", "data": {"name": "a"}})
+    client.post("/cache/set-one", json={"id": "TH_UNI_042", "data": {"name": "b"}})
+
+    response = client.post("/cache/get-many", json=["TH_UNI_041", "TH_UNI_042"])
+
+    assert response.status_code == 422
 
 
 def test_set_many_missing_id_field_returns_400(fake_redis) -> None:

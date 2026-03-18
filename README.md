@@ -102,7 +102,7 @@ Write operations:
 
 Read operations:
 - `GET /cache/get-one/{item_id}`
-- `GET /cache/get-many?ids=id1&ids=id2`
+- `POST /cache/get-many`
 - `GET /cache/get-many-by-prefix?cache_prefix=...`
 - `GET /cache/memory-usage`
 
@@ -212,11 +212,14 @@ Response:
 {"id": "abc123", "data": {"name": "alpha"}}
 ```
 
-`GET /cache/get-many?ids=id1&ids=id2`
+`POST /cache/get-many`
 
 Request:
-- Query params: `ids=user:1&ids=user:2`
-- Body: none
+- Body:
+
+```json
+{"ids": ["TH_UNI_041", "TH_UNI_042"]}
+```
 
 Response:
 

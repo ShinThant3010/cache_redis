@@ -1,12 +1,13 @@
 from time import perf_counter
 
-from fastapi import FastAPI, HTTPException, Query
+from fastapi import FastAPI, HTTPException
 
 from api.schema import (
     CachedIDsResponse,
     CacheMemoryUsageResponse,
     ClearCacheResponse,
     DeleteByPrefixResponse,
+    GetManyRequest,
     GetManyResponse,
     GetOneResponse,
     DeleteOneResponse,
@@ -89,9 +90,9 @@ def cache_get_one(item_id: str) -> GetOneResponse:
     return GetOneResponse(id=item_id, data=data)
 
 
-@app.get("/cache/get-many", response_model=GetManyResponse, tags=["Get"])
-def cache_get_many(ids: list[str] = Query(default_factory=list)) -> GetManyResponse:
-    items = get_many(ids)
+@app.post("/cache/get-many", response_model=GetManyResponse, tags=["Get"])
+def cache_get_many(payload: GetManyRequest) -> GetManyResponse:
+    items = get_many(payload.ids)
     return GetManyResponse(items=items, id_count=len(items))
 
 
