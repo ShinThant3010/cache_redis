@@ -282,8 +282,8 @@ Example `.env`:
 
 ```env
 GOOGLE_APPLICATION_CREDENTIALS="/absolute/path/to/service-account.json"
-REDISHOST=127.0.0.1
-REDISPORT=6379
+REDISHOST=HOST_IP
+REDISPORT=PORT
 ```
 
 ## 11. Testing (pytest)
@@ -315,14 +315,14 @@ gcloud builds submit
 ```
 
 Default substitutions in `cloudbuild.yaml`:
-- `_REGION=asia-southeast1`
-- `_REPO_NAME=hyde-cache-pipeline-api`
-- `_VPC_CONNECTOR_NAME=redis-test-connector`
-- `_SA_NAME=test-result-data-api-sa`
+- `_REGION=REGION`
+- `_REPO_NAME=REPO_NAME`
+- `_VPC_CONNECTOR_NAME=CONNECTOR_NAME`
+- `_SA_NAME=SA_NAME`
 
 Deployed endpoint (current):
-- Base URL: `https://hyde-cache-pipeline-api-810737581373.asia-southeast1.run.app`
-- Swagger: `https://hyde-cache-pipeline-api-810737581373.asia-southeast1.run.app/docs`
+- Base URL: `https://hyde-cache-pipeline-api-PROJECT_ID.REGION.run.app`
+- Swagger: `https://hyde-cache-pipeline-api-PROJECT_ID.REGION.run.app/docs`
 
 ## 13. Observability
 
