@@ -30,7 +30,7 @@ steps:
     - --service-account=${_SA_NAME}@$PROJECT_ID.iam.gserviceaccount.com
 
 substitutions:
-  _REGION: asia-southeast1
-  _REPO_NAME: hyde-cache-pipeline-api
-  _VPC_CONNECTOR_NAME: redis-test-connector
-  _SA_NAME: test-result-data-api-sa
+  _REGION: REGION
+  _REPO_NAME: REPO_NAME
+  _VPC_CONNECTOR_NAME: CONNECTOR_NAME
+  _SA_NAME: SA_NAME
